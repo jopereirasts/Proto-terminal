@@ -23,7 +23,7 @@ int ls(void ){
     strcpy(caminho, pwd());
     dirp = opendir(caminho);
     if( dirp == NULL ) {
-        perror( "can't open /home/fred" );
+        perror( "nao foi possivel abrir diretorio");
     } else {
         for(;;) {
             direntp = readdir( dirp );
