@@ -23,6 +23,23 @@ int cd(char* caminho) {
     return EXIT_SUCCESS;
 }
 
+void head(char *arquivo){
+    FILE *file = fopen(arquivo, "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    char line[100];
+    int count = 0;
+    while (fgets(line, 100, file) && count < 10) {
+        printf("%s", line);
+        count=count+1;
+    }
+
+    fclose(file);
+}
+
 int ls(void ){
     DIR* dirp;
     struct dirent* direntp;
@@ -60,7 +77,11 @@ int main() {
             char caminho[1024];
             scanf("%s", caminho);
             cd(caminho);
-        } else if (strcmp(comando, "exit") == 0) {
+        } else if (strcmp(comando, "head") == 0) {
+            char arquivo[1024];
+            scanf("%s", arquivo);
+            head(arquivo);
+        }else if (strcmp(comando, "exit") == 0) {
             printf("Saindo...\n");
             terminal = false;
         } else {
