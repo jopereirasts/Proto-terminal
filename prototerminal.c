@@ -63,6 +63,22 @@ int ls(void ){
     return EXIT_SUCCESS;
 }
 
+int ps(void ){
+    DIR *dirp;
+    struct dirent* direntp;
+    dirp = opendir("/proc");	
+
+    while ((direntp = readdir(dirp)) != NULL) {
+        int pid = atoi(direntp->d_name);
+        if (pid != 0) {
+            printf("PID: %d\n", pid);
+        }
+    }
+    
+    closedir(dirp);
+    return EXIT_SUCCESS;
+}
+
 int verifica_comando(char* comando){
 
 	if (strstr(comando, "./") != NULL) {
@@ -83,16 +99,6 @@ int verifica_comando(char* comando){
 
 }
 
-int verifica_existe(char *nomedoarquivo){
-	if(access(nomedoarquivo, F_OK) != -1){
-		return 1;
-	} else {
-		return 0;
-	}
-	
-}
-
-
 
 int main() {
   char comando[100];
@@ -104,9 +110,6 @@ int main() {
      fgets(comando, 100, stdin);
      comando[strcspn(comando, "\n")] = '\0';
 
-        int verifica = verifica_existe(comando);
-	    printf("verifica: %d",verifica);
-
 	int tipo_comando = verifica_comando(comando);
 
 	//printf("tipooo: %d",tipo_comando);
@@ -117,15 +120,17 @@ int main() {
       			printf("%s\n", pwd());
     		} else if (strcmp(comando, "ls") == 0) {
       			ls();
+    		} else if (strcmp(comando, "ps") == 0) {
+      			ps();
     		} else if (strstr(comando, "cd") != NULL) {
       			char caminho[1024];
       			scanf("%s", caminho);
       			cd(caminho);
 			} else if (strcmp(comando, "head") == 0) {
             	char arquivo[1024];
-            	scanf("%s", arquivo);
-            	head(arquivo);
-        	} else if (strcmp(comando, "exit") == 0) {
+	        scanf("%s", arquivo);
+       	    	head(arquivo);
+		}else if (strcmp(comando, "exit") == 0) {
       			printf("Saindo...\n");
       			terminal = false;
     		}else{
