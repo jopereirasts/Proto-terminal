@@ -83,6 +83,16 @@ int verifica_comando(char* comando){
 
 }
 
+int verifica_existe(char *nomedoarquivo){
+	if(access(nomedoarquivo, F_OK) != -1){
+		return 1;
+	} else {
+		return 0;
+	}
+	
+}
+
+
 
 int main() {
   char comando[100];
@@ -93,6 +103,9 @@ int main() {
 
      fgets(comando, 100, stdin);
      comando[strcspn(comando, "\n")] = '\0';
+
+        int verifica = verifica_existe(comando);
+	    printf("verifica: %d",verifica);
 
 	int tipo_comando = verifica_comando(comando);
 
