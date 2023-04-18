@@ -99,6 +99,16 @@ int verifica_comando(char* comando){
 
 }
 
+int verifica_existe(char *nomedoarquivo){
+    
+	if(access(nomedoarquivo, F_OK) != -1){
+		return 1;
+	} else {
+		return 0;
+	}
+	
+}
+
 
 int main() {
   char comando[100];
@@ -130,7 +140,7 @@ int main() {
             	char arquivo[1024];
 	        scanf("%s", arquivo);
        	    	head(arquivo);
-		}else if (strcmp(comando, "exit") == 0) {
+		    }else if (strcmp(comando, "exit") == 0) {
       			printf("Saindo...\n");
       			terminal = false;
     		}else{
