@@ -79,6 +79,21 @@ int ps(void ){
     return EXIT_SUCCESS;
 }
 
+void cat(char *arquivo) {
+    FILE *file = fopen(arquivo, "r");
+    char ch;
+
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+    }
+
+    while ((ch = fgetc(file)) != EOF) {
+        putchar(ch);
+    }
+
+    fclose(file);
+}
+
 int verifica_comando(char* comando){
 
 	if (strstr(comando, "./") != NULL) {
@@ -137,6 +152,10 @@ int main() {
       			scanf("%s", caminho);
       			cd(caminho);
 			} else if (strcmp(comando, "head") == 0) {
+            	char arquivo[1024];
+	        scanf("%s", arquivo);
+       	    	head(arquivo);
+		    } else if (strcmp(comando, "cat") == 0) {
             	char arquivo[1024];
 	        scanf("%s", arquivo);
        	    	head(arquivo);
