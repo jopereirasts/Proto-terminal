@@ -4,6 +4,11 @@
 #include <dirent.h>
 #include <string.h>
 #include <stdbool.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/wait.h>
 
 char* pwd() {
     char cwd[1024];
@@ -12,6 +17,30 @@ char* pwd() {
     } else {
         perror("getcwd() error");
         return NULL;
+    }
+}
+
+void saida_arquivo(char* command) {
+    char* program = strtok(command, " ");
+    char* arguments = strtok(NULL, "");
+
+    int fd = open("saida.txt", O_CREAT | O_WRONLY | O_TRUNC, S_IRWXU);
+    dup2(fd, STDOUT_FILENO);
+    close(fd);
+
+    char* args[10];
+    args[0] = program;
+    int i = 1;
+    char* arg = strtok(arguments, " ");
+    while (arg != NULL) {
+        args[i++] = arg;
+        arg = strtok(NULL, " ");
+    }
+    args[i] = NULL;
+
+    if (execvp(program, args) < 0) {
+        printf("Erro ao executar o comando\n");
+        exit(1);
     }
 }
 
@@ -177,6 +206,7 @@ int main() {
                 break;
             case 4: 
                 printf("executar comando > saída ....\n");
+                saida_arquivo(comando);
                 break;
             case 5: 
                 printf("executar comando < entrada....\n");
